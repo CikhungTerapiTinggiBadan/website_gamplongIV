@@ -2,7 +2,6 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import Navbar from './components/navbar';
 
 const HEADER_BG = "bg-[#4E9A73]"; 
 const HEADER_TEXT = "text-[#4E9A73]";
@@ -11,20 +10,35 @@ const YELLO_BORDER = "border-[#E8B931]";
 const YELLO_TEXT = "text-[#E8B931]";
 const MAIN_BG = "bg-white"; 
 
+// placeholder
 const pendudud = [
   [
-    { title: "Jumlah Penduduk", value: "1.234", imageUrl: "/Shodiq.jpg" },
-    { title: "Jumlah Keluarga", value: "567", imageUrl: "/Shodiq.jpg" },
-    { title: "Jumlah RT", value: "100", imageUrl: "/Shodiq.jpg" }
+    { title: "Jumlah Penduduk", value: "1.234", imageUrl: "/penduduk.svg" },
+    { title: "Jumlah Keluarga", value: "567", imageUrl: "/keluarga.svg" },
+    { title: "Jumlah RT", value: "100", imageUrl: "/rt.svg" }
   ],
   [
-    { title: "Jumlah Laki-laki", value: "600", imageUrl: "/Shodiq.jpg" },
-    { title: "Jumlah Perempuan", value: "634", imageUrl: "/Shodiq.jpg" },
-    { title: "Jumlah Lansia", value: "150", imageUrl: "/Shodiq.jpg" }
+    { title: "Jumlah Laki-laki", value: "600", imageUrl: "/cowo.svg" },
+    { title: "Jumlah Perempuan", value: "634", imageUrl: "/cewe.svg" },
+    { title: "Jumlah Lansia", value: "150", imageUrl: "/lansia.svg" }
   ]
 ];
 
-// Cuplikan Berita dari BeritaPage
+// placeholder
+const inven = [
+  [
+    { title: "Jumlah Penduduk", value: "9999", imageUrl: "/gelas.svg" },
+    { title: "Jumlah Keluarga", value: "567", imageUrl: "/piring.svg" },
+    { title: "Jumlah RT", value: "100", imageUrl: "/soblok.svg" }
+  ],
+  [
+    { title: "Jumlah Laki-laki", value: "600", imageUrl: "/meja.svg" },
+    { title: "Jumlah Perempuan", value: "634", imageUrl: "/kursi.svg" },
+    { title: "Jumlah Lansia", value: "9999", imageUrl: "/karpet.svg" }
+  ]
+];
+
+// placeholder
 const beritaCuplikan = [
   {
     id: 1,
@@ -49,6 +63,7 @@ const beritaCuplikan = [
   }
 ];
 
+// placeholder
 const kelompokCuplikan = [
   {
     id: 1,
@@ -70,31 +85,18 @@ const kelompokCuplikan = [
   }
 ];
 
-const ContentCardPlaceholder = ({imageUrl}) => (
-    <div className="bg-white rounded-lg p-3 shadow-md border-2 border-gray-400">
-        <div className="bg-gray-200 h-40 flex items-center justify-center rounded-lg relative overflow-hidden text-gray-500 text-sm">
-            <img 
-                src={imageUrl} 
-                className="w-full h-full object-cover"
-            />
-        </div>
-    </div>
-);
-
+// Hero Slider dengan tinggi dan font responsif
 const HeroSlider = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [backgrounds, setBackgrounds] = useState([]); 
     const [loading, setLoading] = useState(true);
     const sliderRef = useRef(null);
 
-
-
     useEffect(() => {
         const fetchBackgrounds = async () => {
             try {
                 const images = ["/1.png", "/2.png", "/3.png"];
                 setBackgrounds(images);
-
             } catch (error) {
                 console.error("Error fetching background images:", error);
             } finally {
@@ -104,6 +106,19 @@ const HeroSlider = () => {
 
         fetchBackgrounds();
     }, []);
+
+    useEffect(() => {
+        if (loading || backgrounds.length <= 1) return;
+
+        // Timer pindah gambar otomatis (4000ms = 4 detik)
+        const autoSlideInterval = setInterval(() => {
+            const nextIndex = (activeIndex + 1) % backgrounds.length;
+            goToSlide(nextIndex);
+        }, 4000);
+
+        // Membersihkan interval saat slide berubah/di-unmount agar timer reset
+        return () => clearInterval(autoSlideInterval);
+    }, [activeIndex, loading, backgrounds.length]);
 
     const handleScroll = () => {
         if (sliderRef.current) {
@@ -125,16 +140,16 @@ const HeroSlider = () => {
         }
     };
     
-    if (loading) return <div className="w-full h-[50vh] bg-gray-200 animate-pulse" />;
+    if (loading) return <div className="w-full h-[60vh] md:h-[90vh] bg-gray-200 animate-pulse" />;
 
     return (
-            <div className="relative w-full h-[50vh] md:h-[90vh] overflow-hidden">
-              <div 
+        <div className="relative w-full h-[90vh] md:h-[90vh] overflow-hidden">
+            <div 
                 ref={sliderRef}
                 className="flex h-full w-full overflow-x-scroll snap-x snap-mandatory scroll-smooth"
                 onScroll={handleScroll}
                 style={{ WebkitOverflowScrolling: 'touch', msOverflowStyle: 'none', scrollbarWidth: 'none' }}
-              >
+            >
                 {backgrounds.map((src, index) => (
                     <div
                         key={index}
@@ -151,9 +166,7 @@ const HeroSlider = () => {
                         />
                     </div>
                 ))}
-
             </div>
-            
 
             <div
               className="w-full h-full bg-cover bg-center z-10 absolute bottom-0 transform"
@@ -161,13 +174,13 @@ const HeroSlider = () => {
             />
             
             <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 pb-10 pointer-events-none">
-                <h2 className="text-2xl md:text-4xl font-bold text-white drop-shadow-md mb-1 uppercase tracking-wide">
+                <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-white drop-shadow-md mb-1 uppercase tracking-wide">
                     WEBSITE RESMI
                 </h2>
-                <h2 className="text-3xl md:text-5xl font-extrabold text-[#E8B931] drop-shadow-md mb-3 uppercase tracking-wide">
+                <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-[#E8B931] drop-shadow-md mb-3 uppercase tracking-wide">
                     DUSUN GAMPLONG IV
                 </h2>
-                <p className="text-xs md:text-sm text-gray-100 max-w-2xl drop-shadow">
+                <p className="text-xs md:text-sm text-white max-w-2xl drop-shadow px-2">
                     Sumber informasi dan berita terbaru seputar Dusun Gamplong IV. 
                 </p>
             </div>
@@ -177,253 +190,278 @@ const HeroSlider = () => {
                     <button
                         key={index}
                         onClick={() => goToSlide(index)}
-                        className={`w-3 h-3 rounded-full transition-colors duration-300 ${
+                        className={`w-2.5 h-2.5 md:w-3 md:h-3 rounded-full transition-colors duration-300 ${
                             index === activeIndex ? "bg-white scale-110" : "bg-gray-400 opacity-70 hover:opacity-100"
                         }`}
                         aria-label={`Go to slide ${index + 1}`}
                     />
                 ))}
             </div>
-            
         </div>
     );
 };
 
 export default function Home() {
+    const [isDesktop, setIsDesktop] = useState(true);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsDesktop(window.innerWidth >= 768);
+        };
+
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    // Filter data berdasarkan layar HP / Desktop
+    const displayedBerita = isDesktop ? beritaCuplikan : beritaCuplikan.slice(0, 1);
+    const flatPenduduk = pendudud.flat();
+    const displayedPenduduk = isDesktop ? flatPenduduk : flatPenduduk.slice(0, 3);
+    const flatInven = inven.flat();
+    const displayedInven = isDesktop ? flatInven : flatInven.slice(0, 3);
+
     return (
         <div className={`min-h-screen ${MAIN_BG}`}>
             
             <HeroSlider />
-            
-            <section className={`px-4 ${MAIN_BG} mt-10`}>
-                <div className="max-w-5xl mx-auto">
-                    <h2 className="text-3xl font-bold text-center text-black mt-3 mb-1">
+
+            {/* SAMBUTAN KEPALA DUSUN */}
+            <section className={`px-4 ${MAIN_BG} mt-6 md:mt-10`}>
+                <div className={`${HEADER_TEXT} max-w-5xl mx-auto`}>
+                    <h2 className="text-2xl md:text-3xl font-bold text-center mt-3 mb-1">
                         SAMBUTAN KATA
                     </h2>
-                    <h2 className="text-4xl font-bold text-center text-black mb-5">
+                    <h2 className="text-3xl md:text-4xl font-bold text-center mb-5">
                         KEPALA DUSUN GAMPLONG IV
                     </h2>
 
-
-                    <div className={`${HEADER_BG} border-4 p-3 flex flex-col items-center justify-center rounded-4xl mt-10 max-w-md mx-auto`}>
-                        <div className="flex flex-col items-center justify-center bg-white rounded-2xl my-10 p-4">
-                            <div className={`relative w-56 h-56 md:w-74 md:h-74 border-2 overflow-hidden rounded-2xl mx-auto `}>
+                    <div className={`${HEADER_BG} border-4 p-2 md:p-3 flex flex-col items-center justify-center rounded-3xl md:rounded-4xl mt-6 md:mt-10 max-w-md mx-auto`}>
+                        <div className="flex flex-col items-center justify-center bg-white rounded-2xl my-4 md:my-10 p-4 w-full">
+                            <div className="relative w-44 h-44 sm:w-56 sm:h-56 md:w-72 md:h-72 overflow-hidden rounded-2xl mx-auto">
                                 <img 
-                                src={"/Shodiq.jpg"} 
-                                className="w-full h-full object-cover"
+                                    src={"/Shodiq.jpg"} 
+                                    alt="Kepala Dusun"
+                                    className="w-full h-full object-cover"
                                 />
                             </div>
-                            <div className="text-center mt-4">  
-                                <h3 className="text-xl font-bold text-black">SHODIQIN</h3>
-                                <p className="text-gray-600">Kepala Dusun</p>
+                            <div className="text-center mt-3 md:mt-4">  
+                                <h3 className="text-lg md:text-xl font-bold text-black">SHODIQIN</h3>
+                                <p className="text-xs md:text-sm text-gray-600">Kepala Dusun</p>
                             </div>
                         </div>
                     </div>
 
-                    <p className="text-sm text-center text-gray-600 max-w-3xl mx-auto mt-12 mb-8">
+                    <p className="text-xs md:text-sm text-center text-gray-600 max-w-3xl mx-auto my-6 md:my-12 leading-relaxed">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                     </p>
                 </div>
             </section>
-            
+           
+            {/* BERITA TERKINI */}
             <div className={`${YELLO_BG} h-2`}/>
-            <section className={`py-12 px-4 ${HEADER_BG}`}>
-                <div className="max-w-5xl mx-auto">
-                    <h2 className="text-4xl font-bold text-center text-white mb-2">
+            <section className={`py-8 md:py-12 px-4 ${HEADER_BG}`}>
+                <div className="max-w-5xl mx-auto text-white text-center">
+                    <h2 className="text-2xl md:text-4xl font-bold mb-1 md:mb-2">
                         BERITA TERKINI
                     </h2>
-                    <h2 className="text-3xl font-bold text-center text-white mb-2">
+                    <h2 className="text-xl md:text-3xl font-bold mb-2">
                         DUSUN GAMPLONG IV
                     </h2>
-                    <p className="text-sm text-center text-gray-300 max-w-3xl mx-auto mb-8">
+                    <p className="text-xs md:text-sm max-w-3xl mx-auto mb-6 md:mb-12">
                         Kumpulan berita terbaru seputar Dusun Gamplong IV, mulai dari kegiatan, pengumuman, hingga informasi penting lainnya.
                     </p>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {beritaCuplikan.map((item) => (
-                        <div key={item.id} className="bg-white rounded-xl p-4 shadow-md flex flex-col justify-between">
-                            <div>
-                            <div className="relative w-full h-44 rounded-xl overflow-hidden mb-3">
-                                <img 
-                                src={item.image} 
-                                alt={item.title} 
-                                className="w-full h-full object-cover"
-                                />
-                            </div>
-                            <span className="text-[10px] font-extrabold bg-[#4E9A73] text-white px-2.5 py-1 rounded-full uppercase">
-                                {item.category}
-                            </span>
-                            <h3 className="font-extrabold text-sm text-black leading-tight mt-2 mb-2 line-clamp-2">
-                                {item.title}
-                            </h3>
-                            <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
-                                {item.preview}
-                            </p>
-                            </div>
-                        </div>
-                        ))}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                        {displayedBerita.map((item, index) => {
+                            const isMiddle = isDesktop && index === 1; 
+
+                            return (
+                                <div 
+                                    key={item.id} 
+                                    className={`bg-white text-left rounded-xl flex flex-col justify-between transition-all duration-300 p-4 ${
+                                        isMiddle 
+                                            ? "md:p-6 md:scale-110 md:-translate-y-1 z-10" 
+                                            : "md:scale-95 opacity-100 md:opacity-90" 
+                                    }`}
+                                >
+                                    <div>
+                                        <div className={`relative w-full rounded-xl overflow-hidden mb-3 h-48 md:${isMiddle ? 'h-52' : 'h-44'}`}>
+                                            <img 
+                                                src={item.image} 
+                                                alt={item.title} 
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <span className="text-[10px] font-extrabold bg-[#4E9A73] text-white px-2.5 py-1 rounded-full uppercase">
+                                            {item.category}
+                                        </span>
+                                        <h3 className={`font-extrabold text-black leading-tight mt-2 mb-2 line-clamp-2 text-base ${isMiddle ? 'md:text-base' : 'md:text-sm'}`}>
+                                            {item.title}
+                                        </h3>
+                                        <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
+                                            {item.preview}
+                                        </p>
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
 
-                    <div className="flex justify-center mt-10"> 
-                        <Link href="/accommodation#room" className="text-sm font-bold border-b-2 border-white pb-0.5 hover:text-blue-600 text-white hover:border-blue-600 transition">
-                            SEE MORE
+                    <div className="flex justify-center mt-8 md:mt-12"> 
+                        <Link href="/berutu" className="text-xs md:text-sm font-bold border-b-2 border-white pb-0.5 hover:text-yellow-300 text-white hover:border-yellow-300 transition">
+                            SELENGKAPNYA
                         </Link>
                     </div>
                 </div>
             </section>
 
-            <section className={`py-12 px-4 ${MAIN_BG}`}>
-                <div className="max-w-5xl mx-auto">
-                    <h2 className="text-4xl font-bold text-center text-black mb-2">
+            {/* ADMINISTRASI PENDUDUK */}
+            <section className={`py-8 md:py-12 px-4 ${MAIN_BG}`}>
+                <div className={`max-w-5xl mx-auto ${HEADER_TEXT} text-center`}>
+                    <h2 className="text-2xl md:text-4xl font-bold mb-1 md:mb-2">
                         ADMINISTRASI PENDUDUK
                     </h2>
-                    <h2 className="text-3xl font-bold text-center text-black mb-2">
+                    <h2 className="text-xl md:text-3xl font-bold mb-2">
                         DUSUN GAMPLONG IV
                     </h2>
-                    <p className="text-sm text-center text-gray-600 max-w-3xl mx-auto mb-8">
+                    <p className="text-xs md:text-sm max-w-3xl mx-auto mb-6 md:mb-8">
                         Informasi administrasi penduduk terkini seputar Dusun Gamplong IV.
                     </p>
 
-                    <div className="max-w-5xl mx-auto bg-white p-8 rounded-4xl">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {pendudud.map((row, rowIndex) => (
-                                <React.Fragment key={rowIndex}>
-                                    {row.map((item, itemIndex) => (
-                                        <div key={itemIndex} className="bg-[#4E9A73] p-6 rounded-2xl text-center">
-                                            <img
-                                                src={item.imageUrl} 
-                                                alt={item.title}
-                                                className="mx-auto w-15 h-15 mb-4 rounded-xl"
-                                            />
-                                            <h3 className="text-2xl font-bold text-white mb-2">{item.title}</h3>
-                                            <p className="text-lg text-white">{item.value}</p>
-                                        </div>
-                                    ))}
-                                </React.Fragment>
+                    <div className="max-w-5xl mx-auto bg-white p-4 sm:p-6 md:p-8 rounded-2xl md:rounded-4xl shadow-sm md:shadow-none">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                            {displayedPenduduk.map((item, index) => (
+                                <div key={index} className="bg-[#4E9A73] p-4 md:p-6 rounded-2xl text-center flex flex-col items-center justify-center">
+                                    <img
+                                        src={item.imageUrl} 
+                                        alt={item.title}
+                                        className="w-16 h-16 md:w-24 md:h-24 rounded-xl mb-2 object-contain"
+                                    />
+                                    <h3 className="text-lg md:text-2xl font-bold text-white mb-1">{item.title}</h3>
+                                    <p className="text-base md:text-lg text-white font-medium">{item.value}</p>
+                                </div>
                             ))}
                         </div>
                     </div>
 
-                    <div className="flex justify-center mt-10"> 
-                        <Link href="/accommodation#other" className="text-sm font-bold border-b-2 border-black pb-0.5 hover:text-gray-600 text-black hover:border-gray-600 transition">
-                            SEE MORE
+                    <div className="flex justify-center mt-6 md:mt-8"> 
+                        <Link href="/prifil" className={`${HEADER_TEXT} text-xs md:text-sm font-bold border-b-2 pb-0.5 hover:text-gray-600 hover:border-gray-600 transition`}>
+                            SELENGKAPNYA
                         </Link>
                     </div>
-                    
                 </div>
             </section>
             
+            {/* MAPS DAN HOTSPOT AREA */}
             <div className={`${YELLO_BG} h-2`}/>
-            <section className={`py-12 px-4 ${HEADER_BG}`}>
-                <div className="max-w-5xl mx-auto">
-                    <h2 className="text-4xl font-bold text-center text-white mb-2">
+            <section className={`py-8 md:py-12 px-4 ${HEADER_BG}`}>
+                <div className="max-w-5xl mx-auto text-white text-center">
+                    <h2 className="text-2xl md:text-4xl font-bold mb-1 md:mb-2">
                         MAPS DAN HOTSPOT AREA
                     </h2>
-                    <h2 className="text-3xl font-bold text-center text-white mb-2">
+                    <h2 className="text-xl md:text-3xl font-bold mb-2">
                         DUSUN GAMPLONG IV
                     </h2>
-                    <p className="text-sm text-center text-gray-300 max-w-3xl mx-auto mb-8">
+                    <p className="text-xs md:text-sm max-w-3xl mx-auto mb-6 md:mb-12">
                         Kumpulan peta dan hotspot area seputar Dusun Gamplong IV.
                     </p>
                     
-                    <div className="bg-white rounded-2xl p-6 shadow-md max-w-4xl mx-auto">
-                        <div className={`aspect-video w-full rounded-xl overflow-hidden border-4 ${YELLO_BORDER}`}>
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1997.0155609371848!2d110.23699238859953!3d-7.805113498053795!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7af900698e4779%3A0xdb881b201d91bbc6!2sdukuh%20gamplong%204!5e1!3m2!1sid!2sid!4v1787988756891!5m2!1sid!2sid"
-                            width="100%"
-                            height="100%"
-                            style={{ border: 0 }}
-                            allowFullScreen=""
-                            loading="lazy"
-                        ></iframe>
+                    <div className="bg-white rounded-2xl p-3 md:p-6 shadow-md mx-auto">
+                        <div className={`aspect-video w-full rounded-xl overflow-hidden border-2 md:border-4 ${YELLO_BORDER}`}>
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1997.0155609371848!2d110.23699238859953!3d-7.805113498053795!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7af900698e4779%3A0xdb881b201d91bbc6!2sdukuh%20gamplong%204!5e1!3m2!1sid!2sid!4v1787988756891!5m2!1sid!2sid"
+                                width="100%"
+                                height="100%"
+                                style={{ border: 0 }}
+                                allowFullScreen=""
+                                loading="lazy"
+                            ></iframe>
                         </div>
                     </div>
 
-                    <div className="flex justify-center mt-10"> 
-                        <Link href="/accommodation#room" className="text-sm font-bold border-b-2 border-white pb-0.5 hover:text-blue-600 text-white hover:border-blue-600 transition">
-                            SEE MORE
+                    <div className="flex justify-center mt-8 md:mt-12"> 
+                        <Link href="/gugelmap" className="text-xs md:text-sm font-bold border-b-2 border-white pb-0.5 hover:text-blue-600 text-white hover:border-blue-600 transition">
+                            SELENGKAPNYA
                         </Link>
                     </div>
                 </div>
             </section>
 
-            <section className={`py-12 px-4 ${MAIN_BG}`}>
-                <div className="max-w-5xl mx-auto">
-                    <h2 className="text-4xl font-bold text-center text-black mb-2">
+            {/* INVENTARIS DAN SARANA PRASARANA */}
+            <section className={`py-8 md:py-12 px-4 ${MAIN_BG}`}>
+                <div className={`max-w-5xl mx-auto ${HEADER_TEXT} text-center`}>
+                    <h2 className="text-2xl md:text-4xl font-bold mb-1 md:mb-2">
                         INVENTARIS DAN SARANA PRASARANA
                     </h2>
-                    <h2 className="text-3xl font-bold text-center text-black mb-2">
+                    <h2 className="text-xl md:text-3xl font-bold mb-2">
                         DUSUN GAMPLONG IV
                     </h2>
-                    <p className="text-sm text-center text-gray-600 max-w-3xl mx-auto mb-8">
+                    <p className="text-xs md:text-sm max-w-3xl mx-auto mb-6 md:mb-8">
                         Informasi inventaris dan sarana prasarana Dusun Gamplong IV.
                     </p>
 
-                    <div className="max-w-5xl mx-auto bg-white p-8 rounded-4xl">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {pendudud.map((row, rowIndex) => (
-                                <React.Fragment key={rowIndex}>
-                                    {row.map((item, itemIndex) => (
-                                        <div key={itemIndex} className="bg-[#4E9A73] p-6 rounded-2xl text-center">
-                                            <img
-                                                src={item.imageUrl} 
-                                                alt={item.title}
-                                                className="mx-auto w-15 h-15 mb-4 rounded-xl"
-                                            />
-                                            <h3 className="text-2xl font-bold text-white mb-2">{item.title}</h3>
-                                            <p className="text-lg text-white">{item.value}</p>
-                                        </div>
-                                    ))}
-                                </React.Fragment>
+                    <div className="max-w-5xl mx-auto bg-white p-4 sm:p-6 md:p-8 rounded-2xl md:rounded-4xl shadow-sm md:shadow-none">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                            {displayedInven.map((item, index) => (
+                                <div key={index} className="bg-[#4E9A73] p-4 md:p-6 rounded-2xl text-center flex flex-col items-center justify-center">
+                                    <img
+                                        src={item.imageUrl} 
+                                        alt={item.title}
+                                        className="w-12 h-12 md:w-16 md:h-16 mb-2 rounded-xl object-contain"
+                                    />
+                                    <h3 className="text-lg md:text-2xl font-bold text-white mb-1">{item.title}</h3>
+                                    <p className="text-base md:text-lg text-white font-medium">{item.value}</p>
+                                </div>
                             ))}
                         </div>
                     </div>
 
-                    <div className="flex justify-center mt-10"> 
-                        <Link href="/accommodation#other" className="text-sm font-bold border-b-2 border-black pb-0.5 hover:text-gray-600 text-black hover:border-gray-600 transition">
-                            SEE MORE
+                    <div className="flex justify-center mt-6 md:mt-8"> 
+                        <Link href="/invensi" className={`${HEADER_TEXT} text-xs md:text-sm font-bold border-b-2 pb-0.5 hover:text-gray-600 hover:border-gray-600 transition`}>
+                            SELENGKAPNYA
                         </Link>
                     </div>
-                    
                 </div>
             </section>
 
+            {/* KELOMPOK DAN KOMUNITAS */}
             <div className={`${YELLO_BG} h-2`}/>
-            <section className={`py-12 px-4 ${HEADER_BG}`}>
-                <div className="max-w-5xl mx-auto">
-                    <h2 className="text-4xl font-bold text-center text-white mb-2">
+            <section className={`py-8 md:py-12 px-4 ${HEADER_BG}`}>
+                <div className="max-w-5xl mx-auto text-white text-center">
+                    <h2 className="text-2xl md:text-4xl font-bold mb-1 md:mb-2">
                         KELOMPOK DAN KOMUNITAS
                     </h2>
-                    <h2 className="text-3xl font-bold text-center text-white mb-2">
+                    <h2 className="text-xl md:text-3xl font-bold mb-2">
                         DUSUN GAMPLONG IV
                     </h2>
-                    <p className="text-sm text-center text-gray-300 max-w-3xl mx-auto mb-8">
-                        Kumpulan peta dan hotspot area seputar Dusun Gamplong IV.
+                    <p className="text-xs md:text-sm max-w-3xl mx-auto mb-6 md:mb-12">
+                        Kumpulan kelompok dan komunitas warga di Dusun Gamplong IV.
                     </p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {kelompokCuplikan.map((item) => (
-                        <div key={item.id} className="bg-white rounded-2xl p-5 shadow-md flex flex-col items-center text-center">
-                            <div className="w-28 h-28 rounded-2xl overflow-hidden mb-4 border-2 border-[#4E9A73]">
-                            <img 
-                                src={item.image} 
-                                alt={item.title} 
-                                className="w-full h-full object-cover"
-                            />
+                            <div key={item.id} className="bg-white rounded-2xl py-4 md:py-5 shadow-md flex flex-col items-center text-center">
+                                <div className="w-full h-36 md:h-44 overflow-hidden mb-3 md:mb-5">
+                                    <img 
+                                        src={item.image} 
+                                        alt={item.title} 
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                                <h3 className="font-extrabold text-sm md:text-base text-[#4E9A73] mb-2 px-4 line-clamp-2">
+                                    {item.title}
+                                </h3>
+                                <p className="text-xs text-gray-600 leading-relaxed px-4 line-clamp-3">
+                                    {item.desc}
+                                </p>
                             </div>
-                            <h3 className="font-extrabold text-base text-[#4E9A73] mb-2">
-                            {item.title}
-                            </h3>
-                            <p className="text-xs text-gray-600 leading-relaxed">
-                            {item.desc}
-                            </p>
-                        </div>
                         ))}
                     </div>
 
-                    <div className="flex justify-center mt-10"> 
-                        <Link href="/accommodation#room" className="text-sm font-bold border-b-2 border-white pb-0.5 hover:text-blue-600 text-white hover:border-blue-600 transition">
-                            SEE MORE
+                    <div className="flex justify-center mt-8 md:mt-12"> 
+                        <Link href="/prifil" className="text-xs md:text-sm font-bold border-b-2 border-white pb-0.5 hover:text-blue-600 text-white hover:border-blue-600 transition">
+                            SELENGKAPNYA
                         </Link>
                     </div>
                 </div>
@@ -431,4 +469,3 @@ export default function Home() {
         </div>
     );
 }
-
