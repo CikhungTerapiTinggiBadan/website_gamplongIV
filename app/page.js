@@ -7,7 +7,6 @@ const HEADER_BG = "bg-[#4E9A73]";
 const HEADER_TEXT = "text-[#4E9A73]";
 const YELLO_BG = "bg-[#E8B931]";
 const YELLO_BORDER = "border-[#E8B931]";
-const YELLO_TEXT = "text-[#E8B931]";
 const MAIN_BG = "bg-white"; 
 
 // placeholder

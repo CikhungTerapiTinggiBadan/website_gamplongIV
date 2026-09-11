@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const HEADER_BG = "bg-[#4E9A73]"; 
 const YELLO_BORDER = "border-[#E8B931]";
 
@@ -72,7 +74,15 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Padukuhan Gamplong IV. All rights reserved.
           </p>
           <p className="text-[11px] sm:text-xs opacity-90">
-          Dibuat dengan {`<3`} oleh Divisi TI KKN UNY Padukuhan Gamplong IV
+            Dibuat dengan{" "}
+            <Link 
+              href="/admin/login" 
+              title="Login Admin"
+              className="hover:text-[#E8B931] hover:scale-125 transition-all inline-block font-bold px-0.5 cursor-pointer"
+            >
+              &lt;3
+            </Link>{" "}
+            oleh Divisi TI KKN UNY Padukuhan Gamplong IV
           </p>
         </div>
       </div>
